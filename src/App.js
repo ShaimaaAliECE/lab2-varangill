@@ -4,7 +4,7 @@ import React from 'react';
 function Tile(props) {
   return (
     <button className={`btn ${props.val}`} disabled={props.val} onClick={props.handleClick}> {props.val} </button>
-  )
+  ) //use the existence of the val property to change the Tile
 }
 
 class App extends React.Component {
@@ -19,17 +19,16 @@ class App extends React.Component {
   }
 
   tileClicked = (i) => {
-    if (this.state.tiles[i] === null && !this.state.winner) {
+    if (this.state.tiles[i] === null && !this.state.winner) { //check if the tile hasn't been chosen and if game isn't over
       let newTiles = this.state.tiles;
-      if (this.state.turn === "X") {
-        newTiles[i] = "X";
+      if (this.state.turn === "X") { //check who's turn it is
+        newTiles[i] = "X"; //set the clicked tile to the appropriate player's letter/colour
         this.setState({
           turn: "O",
           tiles: newTiles,
           winner: null,
           selected: this.state.selected + 1
         })
-        this.checkWin();
       } else if (this.state.turn === "O") {
         newTiles[i] = "O"
         this.setState({
@@ -38,23 +37,23 @@ class App extends React.Component {
           winner: null,
           selected: this.state.selected + 1
         })
-        this.checkWin();
       }
+      this.checkWin(); //after the end of every turn, check if a win is found
     } 
   }
 
   checkWin = () => {
     //check horizontal
-    const tiles = this.state.tiles
-    for (let i = 0; i < 6; i++) {
-      for (let j = 0; j < 4; j++) {
-        let a = i*7 + j
+    const tiles = this.state.tiles //make constant for simplicity (avoid typing this.state)
+    for (let i = 0; i < 6; i++) { //loop through each row
+      for (let j = 0; j < 4; j++) { //each row contains 4 possible winning slots
+        let a = i*7 + j //get 4 adjacent tiles
         let b = a + 1
         let c = a + 2
         let d = a + 3
-        if (tiles[a] && tiles[b] && tiles[c] && tiles[d]) {
-          if (tiles[a] == tiles[b] && tiles[a] == tiles[c] && tiles[a] == tiles[d]) {
-            this.setState({
+        if (tiles[a] && tiles[b] && tiles[c] && tiles[d]) { //check if all 4 are selected by a player
+          if (tiles[a] == tiles[b] && tiles[a] == tiles[c] && tiles[a] == tiles[d]) { //check if all 4 are selected by the same player
+            this.setState({ //if so, set a winner
               turn: this.state.turn,
               tiles: this.state.tiles,
               winner: tiles[a],
@@ -66,15 +65,15 @@ class App extends React.Component {
     }
 
     //check vertical
-    for (let i = 0; i < 7; i++) {
-      for (let j = 0; j < 3; j++) {
-        let a = i + j*7;
+    for (let i = 0; i < 7; i++) { //loop through each column
+      for (let j = 0; j < 3; j++) { //each column contains 3 possible winning slots
+        let a = i + j*7; //get 4 adjacent tiles
         let b = a + 7
         let c = a + 14
         let d = a + 21
-        if (tiles[a] && tiles[b] && tiles[c] && tiles[d]) {
-          if (tiles[a] == tiles[b] && tiles[a] == tiles[c] && tiles[a] == tiles[d]) {
-            this.setState({
+        if (tiles[a] && tiles[b] && tiles[c] && tiles[d]) { //check if all 4 are selected by a player
+          if (tiles[a] == tiles[b] && tiles[a] == tiles[c] && tiles[a] == tiles[d]) { //check if all 4 are selected by the same player
+            this.setState({ //if so, set a winner
               turn: this.state.turn,
               tiles: this.state.tiles,
               winner: tiles[a]
@@ -91,7 +90,7 @@ class App extends React.Component {
         <header className="App-header">
           <p>
             Play Connect Four!
-          </p>
+          </p> 
           <div>
             <Tile handleClick={() => this.tileClicked(0)} val={this.state.tiles[0]}/>
             <Tile handleClick={() => this.tileClicked(1)} val={this.state.tiles[1]}/>
